@@ -1,24 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { toast } from "sonner"
 import { UserInterface } from "../types/user.types"
-import { LeadSourceInterface } from "../types/leadSource.types"
-import { EmailTemplateInterface } from "../types/emailTemplate.types"
-import { SequenceInterface } from "../types/sequence.types"
-import {
-  loginUser,
-  logoutUser,
-  registerUser,
-  userEmailTemplates,
-  userLeads,
-  userProfile,
-  userSequences,
-} from "./thunkFn"
+import { loginUser, logoutUser, registerUser, userProfile } from "./thunkFn"
 
 const initialState: {
   user: UserInterface
-  leadSource: Array<LeadSourceInterface>
-  emailTemplate: Array<EmailTemplateInterface>
-  sequence: Array<SequenceInterface>
   isLoggedIn: boolean
   loading: boolean
   error: any
@@ -29,9 +15,6 @@ const initialState: {
     name: "",
     email: "",
   },
-  leadSource: [],
-  emailTemplate: [],
-  sequence: [],
   isLoggedIn: false,
   loading: false,
   error: null,
@@ -41,11 +24,7 @@ const initialState: {
 const dataSlice = createSlice({
   name: "Data",
   initialState,
-  reducers: {
-    addNewSequence: (state, action) => {
-      state.sequence = [action.payload, ...state.sequence]
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     // Register User
     builder.addCase(registerUser.pending, (state) => {
@@ -134,81 +113,6 @@ const dataSlice = createSlice({
       state.loading = false
     })
 
-    // User Sequences
-    builder.addCase(userSequences.pending, (state) => {
-      state.status = "pending"
-      state.loading = true
-    })
-    builder.addCase(userSequences.fulfilled, (state, action) => {
-      state.loading = false
-      const { status, data, msg } = action.payload
-
-      if (status === 200) {
-        state.status = "fetch sequences success"
-        state.sequence = [...data].reverse()
-      } else {
-        state.status = "error"
-        toast.error(msg)
-      }
-    })
-    builder.addCase(userSequences.rejected, (state, action) => {
-      if (typeof action.payload === "string") {
-        toast.error(action.payload)
-      }
-      state.status = "error"
-      state.loading = false
-    })
-
-    // User Leads
-    builder.addCase(userLeads.pending, (state) => {
-      state.status = "pending"
-      state.loading = true
-    })
-    builder.addCase(userLeads.fulfilled, (state, action) => {
-      state.loading = false
-      const { status, data, msg } = action.payload
-
-      if (status === 200) {
-        state.status = "fetch leads success"
-        state.leadSource = data
-      } else {
-        state.status = "error"
-        toast.error(msg)
-      }
-    })
-    builder.addCase(userLeads.rejected, (state, action) => {
-      if (typeof action.payload === "string") {
-        toast.error(action.payload)
-      }
-      state.status = "error"
-      state.loading = false
-    })
-
-    // User Email Templates
-    builder.addCase(userEmailTemplates.pending, (state) => {
-      state.status = "pending"
-      state.loading = true
-    })
-    builder.addCase(userEmailTemplates.fulfilled, (state, action) => {
-      state.loading = false
-      const { status, data, msg } = action.payload
-
-      if (status === 200) {
-        state.status = "fetch leads success"
-        state.emailTemplate = data
-      } else {
-        state.status = "error"
-        toast.error(msg)
-      }
-    })
-    builder.addCase(userEmailTemplates.rejected, (state, action) => {
-      if (typeof action.payload === "string") {
-        toast.error(action.payload)
-      }
-      state.status = "error"
-      state.loading = false
-    })
-
     // Logout User
     builder.addCase(logoutUser.pending, (state) => {
       state.status = "pending"
@@ -236,5 +140,5 @@ const dataSlice = createSlice({
   },
 })
 
-export const { addNewSequence } = dataSlice.actions
+export const {} = dataSlice.actions
 export default dataSlice.reducer

@@ -1,14 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import { REGISTER_BODY } from "../api/dto/register.dto"
-import {
-  loginApi,
-  logoutApi,
-  myEmailTemplatesApi,
-  myLeadsApi,
-  mySequencesApi,
-  profileApi,
-  registerApi,
-} from "../api"
+import { loginApi, logoutApi, profileApi, registerApi } from "../api"
 import { AxiosError } from "axios"
 import { LOGIN_BODY } from "../api/dto/login.dto"
 
@@ -50,54 +42,6 @@ export const userProfile = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await profileApi()
-      return response
-    } catch (error) {
-      if (error instanceof AxiosError && error.response) {
-        return rejectWithValue(error.response.data.msg)
-      }
-      return rejectWithValue("An unexpected error occurred.")
-    }
-  }
-)
-
-// Get User Profile Thunk
-export const userSequences = createAsyncThunk(
-  "userSequences",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await mySequencesApi()
-      return response
-    } catch (error) {
-      if (error instanceof AxiosError && error.response) {
-        return rejectWithValue(error.response.data.msg)
-      }
-      return rejectWithValue("An unexpected error occurred.")
-    }
-  }
-)
-
-// Get User Profile Thunk
-export const userLeads = createAsyncThunk(
-  "userLeads",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await myLeadsApi()
-      return response
-    } catch (error) {
-      if (error instanceof AxiosError && error.response) {
-        return rejectWithValue(error.response.data.msg)
-      }
-      return rejectWithValue("An unexpected error occurred.")
-    }
-  }
-)
-
-// Get User Profile Thunk
-export const userEmailTemplates = createAsyncThunk(
-  "userEmailTemplates",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await myEmailTemplatesApi()
       return response
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
