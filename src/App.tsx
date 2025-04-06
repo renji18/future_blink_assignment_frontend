@@ -1,26 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "@xyflow/react/dist/style.css"
+import { Route, Routes } from "react-router-dom"
+import Auth from "./pages/Auth"
+import Home from "./pages/Home"
+import { MyDispatch } from "./redux/store"
+import { useEffect } from "react"
+import { useDispatch } from "react-redux"
+import Sequence from "./pages/Sequence"
+import {
+  userEmailTemplates,
+  userLeads,
+  userProfile,
+  userSequences,
+} from "./redux/thunkFn"
 
-function App() {
+const App = () => {
+  const dispatch = useDispatch<MyDispatch>()
+
+  useEffect(() => {
+    const loadUserData = async () => {
+      const result = await dispatch(userProfile())
+
+      if (userProfile.fulfilled.match(result)) {
+        dispatch(userSequences())
+        dispatch(userLeads())
+        dispatch(userEmailTemplates())
+      }
+    }
+
+    loadUserData()
+  }, [dispatch])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <Routes>
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/sequence/:id" element={<Sequence />} />
+      </Routes>
+    </>
+  )
 }
 
-export default App;
+export default App
