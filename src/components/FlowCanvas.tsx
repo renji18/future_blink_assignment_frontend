@@ -66,6 +66,7 @@ export const FlowCanvas = () => {
     [setEdges]
   )
 
+  // add node fn line 70- line 168
   const addNode = (type: "coldEmail" | "waitDelay" | "leadSource") => {
     const nodeExists = (nodeType: string) =>
       nodes.some((node) => node.type === nodeType)
@@ -180,6 +181,7 @@ export const FlowCanvas = () => {
     [setEdges]
   )
 
+  // fn to upload data to db line 185- line 216
   const handleScheduleFlow = async () => {
     const leadSourceNode = nodes.find((node) => node.type === "leadSource")
     const coldEmailNode = nodes.find((node) => node.type === "coldEmail")
