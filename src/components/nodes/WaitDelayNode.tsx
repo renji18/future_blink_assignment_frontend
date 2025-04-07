@@ -9,6 +9,9 @@ const WaitDelayNode = ({ id, data }: NodeProps) => {
   ) => {
     const { name, value } = e.target
 
+    console.log(name, value);
+    
+
     setNodes((nodes) =>
       nodes.map((node) =>
         node.id === id
@@ -17,6 +20,12 @@ const WaitDelayNode = ({ id, data }: NodeProps) => {
               data: {
                 ...node.data,
                 [name]: value,
+                ...(name === "delayValue" && {
+                  delay: parseInt(value) || 1,
+                }),
+                ...(name === "delayUnit" && {
+                  timeUnit: value,
+                }),
               },
             }
           : node
@@ -42,13 +51,13 @@ const WaitDelayNode = ({ id, data }: NodeProps) => {
 
         <select
           name="delayUnit"
-          value={data.delayUnit || "minutes"}
+          value={data.delayUnit || "days"}
           onChange={handleChange}
           className="p-1 w-full border border-gray-300 rounded"
         >
-          <option value="minutes">Minutes</option>
-          <option value="hours">Hours</option>
           <option value="days">Days</option>
+          <option value="hours">Hours</option>
+          <option value="minutes">Minutes</option>
         </select>
       </div>
 

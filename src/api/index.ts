@@ -21,3 +21,6 @@ export const logoutApi = () => apiWrapper(() => apiClient.get(urls.logout))
 // CREATE FLOW
 export const createFlowApi = (data: CREATE_FLOW_BODY) =>
   apiWrapper(() => apiClient.post(urls.flow, data))
+
+// GET FLOWS
+export const getFlowsApi = () => apiWrapper(() => apiClient.get(urls.flow))

@@ -11,7 +11,6 @@ import ReactFlow, {
   Connection,
   NodeProps,
 } from "reactflow"
-import "reactflow/dist/style.css"
 import { v4 as uuidv4 } from "uuid"
 import ColdEmailNode from "./nodes/ColdEmailNode"
 import WaitDelayNode from "./nodes/WaitDelayNode"
@@ -19,8 +18,15 @@ import LeadSourceNode from "./nodes/LeadSourceNode"
 import { toast } from "sonner"
 import { FlowNodeData } from "../types/flow.node"
 import { createFlowApi } from "../api"
+import { getFlows } from "../redux/thunkFn"
+import { useDispatch } from "react-redux"
+import { MyDispatch } from "../redux/store"
+import { useNavigate } from "react-router-dom"
 
 export const FlowCanvas = () => {
+  const dispatch = useDispatch<MyDispatch>()
+  const navigate = useNavigate()
+
   const [nodes, setNodes, onNodesChange] = useNodesState<FlowNodeData>([])
   const [edges, setEdges, onEdgesChange] = useEdgesState([])
 
@@ -198,7 +204,8 @@ export const FlowCanvas = () => {
 
       if (res.status === 200) {
         toast.success("Flow scheduled successfully!")
-        console.log("Flow created:", res)
+        dispatch(getFlows())
+        navigate(`/flow/${res.data.id}`)
       }
     } catch (error) {
       toast.error("Failed to schedule flow.")

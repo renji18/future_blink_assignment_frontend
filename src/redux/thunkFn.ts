@@ -1,6 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import { REGISTER_BODY } from "../api/dto/register.dto"
-import { loginApi, logoutApi, profileApi, registerApi } from "../api"
+import {
+  getFlowsApi,
+  loginApi,
+  logoutApi,
+  profileApi,
+  registerApi,
+} from "../api"
 import { AxiosError } from "axios"
 import { LOGIN_BODY } from "../api/dto/login.dto"
 
@@ -42,6 +48,22 @@ export const userProfile = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await profileApi()
+      return response
+    } catch (error) {
+      if (error instanceof AxiosError && error.response) {
+        return rejectWithValue(error.response.data.msg)
+      }
+      return rejectWithValue("An unexpected error occurred.")
+    }
+  }
+)
+
+// Get Flows Thunk
+export const getFlows = createAsyncThunk(
+  "getFlows",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await getFlowsApi()
       return response
     } catch (error) {
       if (error instanceof AxiosError && error.response) {

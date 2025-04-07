@@ -1,10 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { toast } from "sonner"
 import { UserInterface } from "../types/user.types"
-import { loginUser, logoutUser, registerUser, userProfile } from "./thunkFn"
+import {
+  getFlows,
+  loginUser,
+  logoutUser,
+  registerUser,
+  userProfile,
+} from "./thunkFn"
+import { FlowInterface } from "../types/flow.types"
 
 const initialState: {
   user: UserInterface
+  flows: Array<FlowInterface>
   isLoggedIn: boolean
   loading: boolean
   error: any
@@ -15,6 +23,7 @@ const initialState: {
     name: "",
     email: "",
   },
+  flows: [],
   isLoggedIn: false,
   loading: false,
   error: null,
@@ -106,6 +115,32 @@ const dataSlice = createSlice({
       }
     })
     builder.addCase(userProfile.rejected, (state, action) => {
+      if (typeof action.payload === "string") {
+        toast.error(action.payload)
+      }
+      state.status = "error"
+      state.loading = false
+    })
+
+    // Flows
+    builder.addCase(getFlows.pending, (state) => {
+      state.status = "pending"
+      state.loading = true
+    })
+    builder.addCase(getFlows.fulfilled, (state, action) => {
+      state.loading = false
+      const { status, data, msg } = action.payload
+
+      if (status === 200) {
+        state.status = "profile success"
+        state.flows = data
+        toast.success(msg)
+      } else {
+        state.status = "error"
+        toast.error(msg)
+      }
+    })
+    builder.addCase(getFlows.rejected, (state, action) => {
       if (typeof action.payload === "string") {
         toast.error(action.payload)
       }
